@@ -4,8 +4,9 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-        $(document).ready(function () {
-            var baseUrl = "https://store.playstation.com/store/api/chihiro/00_09_000/container/US/en/999/";
+$(document).ready(function () {
+            var apiBaseUrl = "https://store.playstation.com/store/api/chihiro/00_09_000/container/US/en/999/";
+            var storeBaseUrl = "https://store.playstation.com/en-us/product/";
             var urlMap = {
                 ufc3: "UP0006-CUSA06536_00-EASPORTSUFC3GAME",
                 rdr2: "UP1004-CUSA03041_00-REDEMPTION000002",
@@ -14,17 +15,18 @@
                 overwatch: "UP0002-CUSA01842_00-OWLEGENDARY00000",
                 nba2k19: "UP1001-CUSA12476_00-NBA2K19000000000",
                 shadowoftombraider: "UP0082-CUSA10938_00-SHADOWTOMBRAIDER",
-                nbalive19: "UP0006-CUSA11355_00-NBALIVE19G4DDRNA"
+                nbalive19: "UP0006-CUSA11355_00-NBALIVE19G4DDRNA",
+                battlefront2: "UP0006-CUSA05770_00-BATTLEFRONTII000"
             };
 
             for (var game in urlMap) {
-                $.get(baseUrl + urlMap[game], function (data, status) {
-                    document.write('<div style="float:left"><img src="' + data.images[0].url + '" align="left" width="200px">');
-                    document.write('<h3>' + data.default_sku.display_price + '</h3>');
+                $.get(apiBaseUrl + urlMap[game], function (data, status) {
+                    document.write('<div style="float:left"><a href="' + storeBaseUrl+data.id + '"><img src="' + data.images[0].url + '" align="left" width="200px"></a>');
+                    document.write('<div style="text-align:center"><div style="display:inline-block"><h3>' + data.default_sku.display_price + '</h3></div>');
                     if (data.default_sku.rewards.length > 0) {
-                        document.write('<h3 style="color: green">' + data.default_sku.rewards[0].bonus_display_price + '</h3>');
+                        document.write(' <div style="display:inline-block"><h3 style="color: green">' + data.default_sku.rewards[0].bonus_display_price + '</h3></div>');
                     }
-                    document.write('</div>');
+                    document.write('</div></div>');
                 });
             }
         });
