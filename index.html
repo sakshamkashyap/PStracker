@@ -27,7 +27,7 @@ $(document).ready(function () {
                     document.write('<div style="text-align:center"><div style="display:inline-block"><h3>' + data.default_sku.display_price + '</h3></div>');
                     if (data.default_sku.rewards.length > 0) {
                         document.write(data.default_sku.rewards[0].bonus_display_price ? (' <div style="display:inline-block"><h3 style="color: green">' + data.default_sku.rewards[0].bonus_display_price + '</h3></div>') : '');
-                        document.write(data.default_sku.rewards[0].display_price ? (' <div style="display:inline-block"><h3 style="color: blue">' + data.default_sku.rewards[0].display_price + '</h3></div>') : '');
+                        document.write(data.default_sku.rewards[0].display_price ? (' <div style="display:inline-block"><h3 style="color: red">' + data.default_sku.rewards[0].display_price + '</h3></div>') : '');
                     }
                     document.write('</div></div>');
                 });
