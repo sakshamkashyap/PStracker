@@ -24,7 +24,7 @@ $(document).ready(function () {
                 $.get(apiBaseUrl + urlMap[game], function (data, status) {
                     document.body.style.background = 'black';
                     document.write('<div style="float:left"><a href="' + storeBaseUrl+data.id + '"><img src="' + data.images[0].url + '" align="left" width="200px"></a>');
-                    document.write('<div style="text-align:center"><div style="display:inline-block"><h1 style="green">' + data.default_sku.display_price + '</h1></div>');
+                    document.write('<div style="text-align:center"><div style="display:inline-block"><h1 style="color: green">' + data.default_sku.display_price + '</h1></div>');
                     if (data.default_sku.rewards.length > 0) {
                         document.write(data.default_sku.rewards[0].bonus_display_price ? (' <div style="display:inline-block"><h1 style="color: yellow">' + data.default_sku.rewards[0].bonus_display_price + '</h1></div>') : '');
                         document.write(data.default_sku.rewards[0].display_price ? (' <div style="display:inline-block"><h1 style="color: white">' + data.default_sku.rewards[0].display_price + '</h1></div>') : '');
