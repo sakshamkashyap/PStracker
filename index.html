@@ -19,7 +19,7 @@ $(document).ready(function () {
 
             for (var game in urlMap) {
                 $.get(apiBaseUrl + urlMap[game], function (data, status) {
-                    document.body.style.background = 'black';
+                    document.body.style.background = '#262626';
                     document.write('<div style="float:left"><a href="' + storeBaseUrl+data.id + '"><img src="' + data.images[0].url + '" align="left" width="200px"></a>');
                     document.write('<div style="text-align:center"><div style="display:inline-block"><h1 style="color: green">' + data.default_sku.display_price + '</h1></div>');
                     if (data.default_sku.rewards.length > 0) {
