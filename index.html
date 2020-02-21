@@ -4,37 +4,61 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-$(document).ready(function () {
+        $(document).ready(function () {
+            document.body.style.background = '#262626';
             var apiBaseUrl = "https://store.playstation.com/store/api/chihiro/00_09_000/container/US/en/999/";
             var storeBaseUrl = "https://store.playstation.com/en-us/product/";
+            var gamestopBaseURL = "https://www.gamestop.com/on/demandware.store/Sites-gamestop-us-Site/default/Product-Variation?";
             var urlMap = {
-                godofwar: "UP9000-CUSA07408_00-00000000GODOFWAR",
-                spiderman: "UP9000-CUSA02299_00-MARVELSSMGOTY000",
-                overwatch: "UP0002-CUSA01842_00-OWLEGENDARY00000",
-                division2: "UP0001-CUSA12639_00-TCTD2BASEGAME001",
-                starwarsjedi: "UP0006-CUSA12539_00-RESPAWNSWBIRDDOG",
-                daysgone: "UP9000-CUSA08966_00-DAYSGONECOMPLETE",
-                hitman2: "UP4572-CUSA12421_00-HITMANSTANDARD00",
-                deathstranding: "UP9000-CUSA11260_00-DEATHSTRAND00001",
-                cyberpunk: "UP4497-CUSA16596_00-0000000000000004",
-                nba2k20: "UP1001-CUSA16310_00-NBA2K20000000000",
-                tlou2: "UP9000-CUSA07820_00-THELASTOFUSP2DLX",
-                nfsheat: "UP0006-CUSA15081_00-PREORDEREDITION0",
-                destiny2: "UP0002-CUSA05042_00-D2SHADOWPRE00001"
+                spiderman: ["UP9000-CUSA02299_00-MARVELSSMGOTY000",'10131620'],
+                overwatch: ["UP0002-CUSA01842_00-OWLEGENDARY00000",'10126703'],
+                division2: ["UP0001-CUSA12639_00-TCTD2BASEGAME001",'10167228'],
+                starwarsjedi: ["UP0006-CUSA12539_00-SWJFOSTANDARD000",'10175618'],
+                daysgone: ["UP9000-CUSA08966_00-DAYSGONECOMPLETE",'10131616'],
+                hitman2: ["UP4572-CUSA12421_00-HITMANSTANDARD00",'10164161'],
+                deathstranding: ["UP9000-CUSA11260_00-DEATHSTRAND00001",'10174855'],
+                nba2k20: ["UP1001-CUSA16310_00-NBA2K20000000000",'11094999'],
+                tlou2: ["UP9000-CUSA07820_00-THELASTOFUSPART2", '11097389'],
+                nfsheat: ["UP0006-CUSA15081_00-NEEDFORSPEED2020",'11096443']
             };
 
-            for (var game in urlMap) {
-                $.get(apiBaseUrl + urlMap[game], function (data, status) {
-                    document.body.style.background = '#262626';
-                    document.write('<div style="float:left"><a href="' + storeBaseUrl+data.id + '"><img src="' + data.images[0].url + '" align="left" width="200px"></a>');
-                    document.write('<div style="text-align:center"><div style="display:inline-block"><h1 style="color: green">' + data.default_sku.display_price + '</h1></div>');
-                    if (data.default_sku.rewards.length > 0) {
-                        document.write(data.default_sku.rewards[0].bonus_display_price ? (' <div style="display:inline-block"><h1 style="color: yellow">' + data.default_sku.rewards[0].bonus_display_price + '</h1></div>') : '');
-                        document.write(data.default_sku.rewards[0].display_price ? (' <div style="display:inline-block"><h1 style="color: white">' + data.default_sku.rewards[0].display_price + '</h1></div>') : '');
-                    }
-                    document.write('</div></div>');
-                });
-                document.write('&nbsp;');
+            document.write(
+                '<table style="width:100%">' +
+                    '<tr style="color:white">' +
+                        '<th>Game</th>' +
+                        '<th>PSN original</th>' +
+                        '<th>PSN sale</th>' +
+                        '<th>PSN special</th>' +
+                        '<th>Gamestop NEW</th>' +
+                        '<th>Gamestop Pre-owned</th>' +
+                    '</tr>'
+            );
+
+            document.write(getAllRows());
+            document.write('</table>');
+
+            function getAllRows(){
+                var allrows = '';
+                for(var game in urlMap){
+                    $.get(apiBaseUrl + urlMap[game][0])
+                        .always(function(data){
+                            $.get(gamestopBaseURL + getGamestopGameSubDomain(urlMap[game][1]))
+                                .done(function(gs){
+                                    allrows += '<tr>' + 
+                                    '<td><a href="' + storeBaseUrl+data.id + '"><img src="' + data.images[0].url + '" align="left" width="200px"></a></td>' + 
+                                    '<td><span>' + data.default_sku.display_price + '</span></td>' +
+                                    '<td>'+ data.default_sku.rewards[0].bonus_display_price ? (' <span>' + data.default_sku.rewards[0].bonus_display_price +'</span> ') : '--' +'</td>' +
+                                    '<td>'+ data.default_sku.rewards[0].bonus_display_price ? (' <span>' + data.default_sku.rewards[0].bonus_display_price +'</span> ') : '--' +'</td>' + 
+                                    '<td><span>' + gs.product.variationAttributes[0].values[0].price.sales.formatted + '</span></td>' + 
+                                    '<td><span>' + gs.product.variationAttributes[0].values[1].price.sales.formatted + '</span></td>' + 
+                                    '</tr>';
+                                });
+                        });
+                }
+            }
+
+            function getGamestopGameSubDomain(id){
+                return "dwvar_" + id + "_condition=New&pid=" + id + "&quantity=1";
             }
         });
     </script>
